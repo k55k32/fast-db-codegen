@@ -1,0 +1,9 @@
+#! .temp/<%=realType%>Controller.ts
+import { createProxy } from './BaseController'
+import <%=realType%> from '@/model/<%=realType%>'
+
+interface <%=realType%>Controller {
+}
+export default createProxy<<%=realType%>Controller, <%=realType%>>({
+    baseUrl: '',
+})

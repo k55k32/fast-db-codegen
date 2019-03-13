@@ -1,0 +1,10 @@
+#! .temp/<%= realType%>.ts
+/**
+* <%= typeRemark %>
+*/
+export default interface <%= realType %> {<% params.forEach(function(p) {%><% if (p.remark) { %>
+    /**
+     * <%= p.remark %>
+     */<%}%>
+    <%=p.name%>: <%-p.type%><%})%>
+}
