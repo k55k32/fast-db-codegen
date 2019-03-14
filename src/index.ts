@@ -11,7 +11,7 @@ interface CodeGenConfig {
     datasource: DataSourceConfig
 }
 
-const CONFIG_DIR = resolve('.shscode')
+const CONFIG_DIR = resolve('.fast-codegen')
 
 function resolve(dir: string) {
     return _path.join(process.cwd(), dir)
