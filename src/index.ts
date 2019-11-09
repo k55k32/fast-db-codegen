@@ -89,4 +89,5 @@ async function codeGenByDb(params: string[]) {
 }
 
 let params = process.argv.slice(2)
+console.log('params', process.argv)
 codeGenByDb(params)
