@@ -1,7 +1,7 @@
 {
   "name": "fast-db-codegen",
   "version": "1.0.1",
-  "description": "fast-db-codegen",
+  "description": "a code generator base on ejs template and mysql database",
   "main": "index.js",
   "scripts": {
     "dev": "parcel serve src/index.ts --target node",
@@ -12,10 +12,8 @@
   "author": "diamondfsd",
   "license": "ISC",
   "dependencies": {
-    "@types/superagent": "^3.8.5",
     "ejs": "^2.6.1",
-    "mysql": "^2.16.0",
-    "superagent": "^4.1.0"
+    "mysql": "^2.16.0"
   },
   "bin": {
     "codegen": "./dist/index.js"
@@ -23,8 +21,12 @@
   "devDependencies": {
     "@types/ejs": "^2.6.1",
     "@types/mysql": "github:types/mysql",
-    "parcel": "^1.11.0",
-    "parcel-plugin-shebang": "^1.2.3",
+    "parcel": "^1.12.4",
+    "parcel-plugin-shebang": "^1.2.8",
     "typescript": "^3.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/k55k32/fast-db-codegen.git"
   }
 }
