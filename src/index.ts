@@ -52,7 +52,7 @@ function getConfig() {
     return JSON.parse(fs.readFileSync(_path.join(CONFIG_DIR, 'config.json')).toString()) as CodeGenConfig
 }
 
-async function codeGenByDb(params: string[]) {
+function codeGenByDb(params: string[]) {
     const config = getConfig()
     params = params.map(param => {
         return param.replace(/-/g, '_')
@@ -89,5 +89,4 @@ async function codeGenByDb(params: string[]) {
 }
 
 let params = process.argv.slice(2)
-console.log('params', process.argv)
 codeGenByDb(params)
