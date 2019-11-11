@@ -1,6 +1,6 @@
 {
   "name": "fast-db-codegen",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "a code generator base on ejs template and mysql database",
   "main": "index.js",
   "scripts": {
