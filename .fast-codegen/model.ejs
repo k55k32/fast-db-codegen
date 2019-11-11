@@ -1,10 +1,6 @@
-#! .temp/<%= realType%>.ts
-/**
-* <%= typeRemark %>
-*/
+#! .temp/<%= realType%>.ts?mode=overwrite
+/** <%= typeRemark %> */
 export default interface <%= realType %> {<% fields.forEach(function(p) {%><% if (p.remark) { %>
-    /**
-     * <%= p.remark %>
-     */<%}%>
-    <%=p.name%>: <%-p.type%><%})%>
+    /** <%= p.remark %> */<%}%>
+    <%=p.name%>?: <%-p.type%><%})%>
 }
