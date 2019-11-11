@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
-import fs from 'fs'
+import fs, { appendFile as appendFileToTarget } from 'fs'
 import ejs from 'ejs'
 import _path from 'path'
 import TabelDefineExplain from './mysql-table-define-explain'
 import DataSourceConfig from './model/DataSourceConfig'
+import Setting from './model/Setting'
 
 interface CodeGenConfig {
     profile: {key: CodeGenConfig}
@@ -28,24 +29,80 @@ function mkdirs(dirname: string, callback: () => void){
         }
     })
 }
+/**
+ * 
+ * @param target 目标目录
+ * @param content 内容
+ */
 function writeFile(target: string , content: string) {
+    let setting = {} as Setting
+    if (target.indexOf('?') > -1) {
+        const targetWithOption = target.split('?')
+        target = targetWithOption[0]
+        setting = queryToObject(targetWithOption[1]) 
+    }
     target = resolve(target)
     
     
     const dirPath = target.substring(0, target.lastIndexOf('\\'))
     mkdirs(dirPath, () => {
-        if (fs.existsSync(target)) {
-            console.error(target, ' already exists')
+        if (setting.mode) {
+            switch(setting.mode) {
+                case 'append': 
+                    appendFileToTarget(target, content)
+                    break
+                case 'overwrite':
+                    if (fs.existsSync(target)) {
+                        fs.unlinkSync(target)
+                    }
+                    writeFileToTarget(target, content)
+                    break
+                default:
+                    const unknowSetting = setting.mode as never
+                    console.log('unkonwe setting mode', unknowSetting)
+                    break
+            }
         } else {
-            fs.writeFile(target, content, (err) => {
-                if (err) {
-                    console.log('write error: ', target,  err)
-                } else {
-                    console.log(target, ' write success')
-                }
-            })
+            if (fs.existsSync(target)) {
+                console.error(target, ' already exists')
+            } else {
+                writeFileToTarget(target, content)
+            }
         }
     })
+}
+
+function writeFileToTarget(target: string, content: string) {
+    fs.writeFile(target, content, (err) => {
+        if (err) {
+            console.log('write error: ', target,  err)
+        } else {
+            console.log(target, ' write success')
+        }            
+    })
+}
+function appendFileToTarget(target: string, content: string) {
+    fs.appendFile(target, content, (err) => {
+        if (err) {
+            console.log('append error: ', target,  err)
+        } else {
+            console.log(target, ' append success')
+        }
+    }) 
+}
+
+function queryToObject(query: string) {
+    const setting = {}
+    if (query) {
+        const kvArray = query.split('&')
+        kvArray.forEach(kv => {
+            const [k, v] = kv.split('=')
+            if(k && v) {
+                setting[k] = v
+            }
+        })
+    }
+    return setting as Setting
 }
 
 function getConfig() {
