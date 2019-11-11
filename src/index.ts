@@ -35,7 +35,7 @@ function writeFile(target: string , content: string) {
     const dirPath = target.substring(0, target.lastIndexOf('\\'))
     mkdirs(dirPath, () => {
         if (fs.existsSync(target)) {
-            console.error(target, ' is exists')
+            console.error(target, ' already exists')
         } else {
             fs.writeFile(target, content, (err) => {
                 if (err) {
@@ -80,6 +80,8 @@ function codeGenByDb(params: string[]) {
                 writeFile(parseTargetPath, ejs.render(ejsTemplateMap[targetPath], model))
             })
         })
+    }).catch((error) => {
+        console.log('render error ', error)
     })
 }
 
