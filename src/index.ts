@@ -59,30 +59,25 @@ function codeGenByDb(params: string[]) {
     })
     const readTableDefinePromise = TabelDefineExplain(params, config.datasource)
     const ejsTemplateMap = {}
-    fs.readdir(CONFIG_DIR, (err, files) => {
-        if (err) {
-            console.log('read dir path failed: ', CONFIG_DIR, err)
-            return
-        }
-        files.forEach(file => {
-            if (file.endsWith('.ejs')) {
-                const absolutePath = _path.join(CONFIG_DIR, file)
-                const fileMateData = fs.readFileSync(absolutePath).toString()
-                let targetPath = fileMateData.substr(0, fileMateData.indexOf('\n'))
-                if (targetPath.match(/#!.*\..*/g)) {
-                    targetPath = targetPath.substr(2).trim()
-                    console.log('find template: ', file, ' -> ', targetPath)
-                    const content = fileMateData.substr(fileMateData.indexOf('\n') + 1)
-                    ejsTemplateMap[targetPath] = content
-                }
+    const files = fs.readdirSync(CONFIG_DIR)
+    files.forEach(file => {
+        if (file.endsWith('.ejs')) {
+            const absolutePath = _path.join(CONFIG_DIR, file)
+            const fileMateData = fs.readFileSync(absolutePath).toString()
+            let targetPath = fileMateData.substr(0, fileMateData.indexOf('\n'))
+            if (targetPath.match(/#!.*\..*/g)) {
+                targetPath = targetPath.substr(2).trim()
+                console.log('find template: ', file, ' -> ', targetPath)
+                const content = fileMateData.substr(fileMateData.indexOf('\n') + 1)
+                ejsTemplateMap[targetPath] = content
             }
-        })
-        readTableDefinePromise.then(modelTypeList => {
-            modelTypeList.forEach(model => {
-                Object.keys(ejsTemplateMap).forEach(targetPath => {
-                    let parseTargetPath = ejs.render(targetPath, model)
-                    writeFile(parseTargetPath, ejs.render(ejsTemplateMap[targetPath], model))
-                })
+        }
+    })
+    readTableDefinePromise.then(modelTypeList => {
+        modelTypeList.forEach(model => {
+            Object.keys(ejsTemplateMap).forEach(targetPath => {
+                let parseTargetPath = ejs.render(targetPath, model)
+                writeFile(parseTargetPath, ejs.render(ejsTemplateMap[targetPath], model))
             })
         })
     })
