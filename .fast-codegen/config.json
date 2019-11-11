@@ -4,6 +4,6 @@
         "user": "root",
         "password": "root",
         "port": "3306",
-        "database": "general-report"
+        "database": "fast-admin"
     }
 }

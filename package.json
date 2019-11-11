@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "parcel serve src/index.ts --target node",
     "build": "parcel build src/index.ts --target node",
-    "push": "npm version patch && git push && git push --tags",
+    "push": "npm version patch && git push && git push --tags && npm publish",
     "start": "node dist/index.js",
-    "codegen": "node dist/index.js"
+    "codegen": "npm run build && node dist/index.js"
   },
   "author": "diamondfsd",
   "license": "ISC",

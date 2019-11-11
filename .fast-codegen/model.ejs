@@ -2,7 +2,7 @@
 /**
 * <%= typeRemark %>
 */
-export default interface <%= realType %> {<% params.forEach(function(p) {%><% if (p.remark) { %>
+export default interface <%= realType %> {<% fields.forEach(function(p) {%><% if (p.remark) { %>
     /**
      * <%= p.remark %>
      */<%}%>

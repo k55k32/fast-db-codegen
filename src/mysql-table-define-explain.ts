@@ -1,5 +1,5 @@
 import { ModelType } from "./model/ModelType"
-import { Param } from './model/Param'
+import { Field } from './model/Field'
 import DataSourceConfig from "./model/DataSourceConfig"
 import mysql, { RowDataPacket } from 'mysql'
 import Connection = require("mysql/lib/Connection")
@@ -59,6 +59,9 @@ function fieldNameParse(source: string) {
     })
 }
 
+/**
+ * 将表结构解析为 ModelType对象
+ */
 export default async (params: string[], dbConfig: DataSourceConfig): Promise<ModelType[]> => {
     try {
         const modelTypeList = []
@@ -67,10 +70,11 @@ export default async (params: string[], dbConfig: DataSourceConfig): Promise<Mod
             const data = await getTableDefine(table, dbConfig)
             const modelName = toCamelCase(table)
             const modelType = new ModelType(modelName, data.fields.map(field => {
-                return new Param(fieldNameParse(field.key), field.type, false, field.remark)
+                return new Field(fieldNameParse(field.key), field.type, field.remark)
             }))
             modelType.typeRemark = data.tableRemark
             modelType.tableName = table
+            modelType.typeNameWithHyphen = table.replace('_', '-').toLocaleLowerCase()
             modelType.primaryKey = data.primaryKey
             modelTypeList.push(modelType)
         }
