@@ -84,7 +84,7 @@ function writeFileToTarget(target: string, content: string) {
 function appendFileToTarget(target: string, content: string) {
     if (fs.existsSync(target)) {
         const fileContent = fs.readFileSync(target, 'utf-8')
-        if (fileContent.indexOf(content)) {
+        if (fileContent.indexOf(content.trim()) > -1) {
             console.log('append content exists, ignore')
             return
         }
