@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import fs, { appendFile as appendFileToTarget } from 'fs'
+import fs from 'fs'
 import ejs from 'ejs'
 import _path from 'path'
 import TabelDefineExplain from './mysql-table-define-explain'
