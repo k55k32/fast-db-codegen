@@ -74,7 +74,7 @@ export default async (params: string[], dbConfig: DataSourceConfig): Promise<Mod
             }))
             modelType.typeRemark = data.tableRemark
             modelType.tableName = table
-            modelType.typeNameWithHyphen = table.replace('_', '-').toLocaleLowerCase()
+            modelType.typeNameWithHyphen = table.replace(/_/g, '-').toLocaleLowerCase()
             modelType.primaryKey = data.primaryKey
             modelTypeList.push(modelType)
         }

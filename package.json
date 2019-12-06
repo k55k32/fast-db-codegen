@@ -22,6 +22,7 @@
   "devDependencies": {
     "@types/ejs": "^2.6.1",
     "@types/mysql": "github:types/mysql",
+    "@types/node": "^12.12.14",
     "parcel": "^1.12.4",
     "parcel-plugin-shebang": "^1.2.8",
     "typescript": "^3.2.2"
