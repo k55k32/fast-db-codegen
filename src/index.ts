@@ -133,7 +133,10 @@ function codeGenByDb(params: string[]) {
                 targetPath = targetPath.substr(2).trim()
                 console.log('find template: ', file, ' -> ', targetPath)
                 const content = fileMateData.substr(fileMateData.indexOf('\n') + 1)
-                ejsTemplateMap[targetPath] = content
+                ejsTemplateMap[targetPath] = {
+                    path: absolutePath, 
+                    content,
+                }
             }
         }
     })
@@ -141,7 +144,10 @@ function codeGenByDb(params: string[]) {
         modelTypeList.forEach(model => {
             Object.keys(ejsTemplateMap).forEach(targetPath => {
                 let parseTargetPath = ejs.render(targetPath, model)
-                writeFile(parseTargetPath, ejs.render(ejsTemplateMap[targetPath], model))
+                const templateMap = ejsTemplateMap[targetPath]
+                writeFile(parseTargetPath, ejs.render(templateMap.content, model, {
+                    filename: templateMap.path
+                }))
             })
         })
     }).catch((error) => {

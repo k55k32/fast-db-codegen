@@ -4,6 +4,6 @@
         "user": "root",
         "password": "root",
         "port": "3306",
-        "database": "fast-admin"
+        "database": "fss-admin"
     }
 }
