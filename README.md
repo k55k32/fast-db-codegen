@@ -25,7 +25,8 @@ yarn add -D fast-db-codegen
 ```
 
 ### 模板内参数
-- 所有 `.fast-codegen` 文件夹下, 以`.ejs`为扩展名, 并且内容的第一行以`#!`开头的文件, 都会当做模板处理进行编译
+- 所有 `.fast-codegen/default` 文件夹下, 以`.ejs`为扩展名, 并且内容的第一行以`#!`开头的文件, 都会当做模板处理进行编译
+- 可以根据需求创建多套模板，在 `.fast-codege` 下创建新的文件夹 `dirName`，在运行的时候通过 `npm run codegen template=dirName xxxx` 进行选择模板
 - 第一行为描述行 `#! xxx/xxx.xx` 为渲染目标路径（第一行如果不是以 `#!` 开头, 不进行渲染）,  `#!`后的内容同样支持 ejs 语法
 - 可以给描述行传参进行不同的渲染模式, 格式为 `#! xxx/xxx/xx.xx?mode=youMode`, 其中`youMode`替换为需要的模式
   - 啥都不传: 默认模式, 目标文件不存在, 则会创建目录并且创建目标文件并写入
@@ -84,7 +85,7 @@ CREATE TABLE `fs_user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户基础表'
 ```
 
-- 有个模板文件如下 `.fast-codege/demo.ejs` : 
+- 有个模板文件如下 `.fast-codege/default/demo.ejs` :
 ```
 #! .temp/<%=realType%>.json
 {

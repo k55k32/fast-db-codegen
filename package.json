@@ -14,18 +14,18 @@
   "license": "ISC",
   "dependencies": {
     "ejs": "^2.6.1",
-    "mysql": "^2.16.0"
+    "mysql": "^2.18.1"
   },
   "bin": {
     "codegen": "./dist/index.js"
   },
   "devDependencies": {
-    "@types/ejs": "^2.6.1",
+    "@types/ejs": "^2.7.0",
     "@types/mysql": "github:types/mysql",
-    "@types/node": "^12.12.14",
+    "@types/node": "^12.12.35",
     "parcel": "^1.12.4",
     "parcel-plugin-shebang": "^1.2.8",
-    "typescript": "^3.2.2"
+    "typescript": "^3.8.3"
   },
   "repository": {
     "type": "git",

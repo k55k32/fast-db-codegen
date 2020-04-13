@@ -1,0 +1,12 @@
+#! .temp/<%=realType%>.json?mode=append
+{
+    "typeName":  <%-JSON.stringify(typeName)%>,
+    "typeNameWithHyphen":  <%-JSON.stringify(typeNameWithHyphen)%>,
+    "fields": [
+        <%-fields.map(JSON.stringify).join(',\n')%>
+    ],
+    "realType": <%-JSON.stringify(realType)%>,
+    "tableName": <%-JSON.stringify(tableName)%>,
+    "primaryKey": <%-JSON.stringify(primaryKey)%>,
+    "typeRemark": <%-JSON.stringify(typeRemark)%>
+}

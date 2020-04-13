@@ -2,8 +2,8 @@
 
 import fs from 'fs'
 import ejs from 'ejs'
-import _path from 'path'
-import TabelDefineExplain from './mysql-table-define-explain'
+import path from 'path'
+import TableDefineExplain from './mysql-table-define-explain'
 import DataSourceConfig from './model/DataSourceConfig'
 import Setting from './model/Setting'
 
@@ -15,7 +15,7 @@ interface CodeGenConfig {
 const CONFIG_DIR = resolve('.fast-codegen')
 
 function resolve(dir: string) {
-    return _path.join(process.cwd(), dir)
+    return path.join(process.cwd(), dir)
 }
 
 function mkdirs(dirname: string, callback: () => void){
@@ -23,14 +23,14 @@ function mkdirs(dirname: string, callback: () => void){
         if(exists){
             callback()
         }else{
-            mkdirs(_path.dirname(dirname), () => {
+            mkdirs(path.dirname(dirname), () => {
                 fs.mkdir(dirname, callback)
             })
         }
     })
 }
 /**
- * 
+ *
  * @param target 目标目录
  * @param content 内容
  */
@@ -39,16 +39,16 @@ function writeFile(target: string , content: string) {
     if (target.indexOf('?') > -1) {
         const targetWithOption = target.split('?')
         target = targetWithOption[0]
-        setting = queryToObject(targetWithOption[1]) 
+        setting = queryToObject(targetWithOption[1])
     }
     target = resolve(target)
-    
-    
+
+
     const dirPath = target.substring(0, target.lastIndexOf('\\'))
     mkdirs(dirPath, () => {
         if (setting.mode) {
             switch(setting.mode) {
-                case 'append': 
+                case 'append':
                     appendFileToTarget(target, content)
                     break
                 case 'overwrite':
@@ -78,7 +78,7 @@ function writeFileToTarget(target: string, content: string) {
             console.log('write error: ', target,  err)
         } else {
             console.log(target, ' write success')
-        }            
+        }
     })
 }
 function appendFileToTarget(target: string, content: string) {
@@ -95,7 +95,7 @@ function appendFileToTarget(target: string, content: string) {
         } else {
             console.log(target, ' append success')
         }
-    }) 
+    })
 }
 
 function queryToObject(query: string) {
@@ -113,20 +113,25 @@ function queryToObject(query: string) {
 }
 
 function getConfig() {
-    return JSON.parse(fs.readFileSync(_path.join(CONFIG_DIR, 'config.json')).toString()) as CodeGenConfig
+    return JSON.parse(fs.readFileSync(path.join(CONFIG_DIR, 'config.json')).toString()) as CodeGenConfig
 }
 
 function codeGenByDb(params: string[]) {
     const config = getConfig()
+    let templateDir = 'default'
+    if (params[0].startsWith('template=')) {
+        templateDir = params.shift().split('=')[1]
+    }
+    const templatePath = path.join(CONFIG_DIR, templateDir)
     params = params.map(param => {
         return param.replace(/-/g, '_')
     })
-    const readTableDefinePromise = TabelDefineExplain(params, config.datasource)
+    const readTableDefinePromise = TableDefineExplain(params, config.datasource)
     const ejsTemplateMap = {}
-    const files = fs.readdirSync(CONFIG_DIR)
+    const files = fs.readdirSync(templatePath)
     files.forEach(file => {
         if (file.endsWith('.ejs')) {
-            const absolutePath = _path.join(CONFIG_DIR, file)
+            const absolutePath = path.join(templatePath, file)
             const fileMateData = fs.readFileSync(absolutePath).toString()
             let targetPath = fileMateData.substr(0, fileMateData.indexOf('\n'))
             if (targetPath.match(/#!.*\..*/g)) {
@@ -134,7 +139,7 @@ function codeGenByDb(params: string[]) {
                 console.log('find template: ', file, ' -> ', targetPath)
                 const content = fileMateData.substr(fileMateData.indexOf('\n') + 1)
                 ejsTemplateMap[targetPath] = {
-                    path: absolutePath, 
+                    path: absolutePath,
                     content,
                 }
             }
