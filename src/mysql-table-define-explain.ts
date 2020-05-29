@@ -16,7 +16,7 @@ async function getTableDefine(tableName: string, dbConfig: DataSourceConfig) {
         connection = mysql.createConnection(dbConfig)
         connection.connect()
     }
-    const p1 = executeQuery(`select table_name, table_comment from information_schema.tables where table_schema = ? and table_name = ? `, [dbConfig.database, tableName])
+    const p1 = executeQuery(`SELECT TABLE_NAME, TABLE_COMMENT from information_schema.tables where table_schema = ? and table_name = ? `, [dbConfig.database, tableName])
     const p2 = executeQuery(`SELECT COLUMN_NAME, DATA_TYPE, COLUMN_COMMENT FROM information_schema.COLUMNS WHERE table_schema = ? AND table_name = ? ORDER BY ORDINAL_POSITION`, [dbConfig.database, tableName])
     const p3 = executeQuery(`SELECT COLUMN_NAME FROM information_schema.KEY_COLUMN_USAGE WHERE table_schema = ? AND table_name = ? AND constraint_name = 'PRIMARY'`, [dbConfig.database, tableName])
     const [tableDefine, columnDefine, primaryDefine] = await Promise.all([p1, p2, p3])
@@ -24,7 +24,7 @@ async function getTableDefine(tableName: string, dbConfig: DataSourceConfig) {
         throw `table ${tableName} no found`
     }
     const table = tableDefine[0]
-    
+
     return {
         tableName: table['TABLE_NAME'],
         tableRemark: table['TABLE_COMMENT'],
@@ -44,7 +44,7 @@ async function executeQuery(query: string, data: any[]): Promise<RowDataPacket[]
         connection.query<RowDataPacket[]>(query, data, (e, result) => {
             resolve(result)
         })
-    }) 
+    })
 }
 
 function toCamelCase(source: string, split = '_') {
